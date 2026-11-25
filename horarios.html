@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RotaBus | Horários</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+    <a class="brand" href="index.html">
+        <img src="assets/rotabus-logo.png" alt="RotaBus">
+    </a>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="linhas.html">Linhas</a>
+        <a class="active" href="horarios.html">Horários</a>
+        <a href="mapa.html">Mapa</a>
+        <a href="sobre.html">Sobre</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="pagehero">
+        <span class="eyebrow">PLANEJE SUA VIAGEM</span>
+        <h1>Horários dos ônibus</h1>
+        <p>Consulte os horários por linha e período.</p>
+    </section>
+
+    <section class="section">
+
+        <div class="filterbar">
+            <label for="schedule-line">Selecione a linha:</label>
+
+            <select id="schedule-line">
+                <option value="all">Todas as linhas</option>
+                <option value="01">Linha 01 — Centro</option>
+                <option value="02">Linha 02 — Terminal</option>
+                <option value="03">Linha 03 — Bairros</option>
+                <option value="04">Linha 04 — Universidade</option>
+            </select>
+        </div>
+
+        <p class="notice">
+            Atenção: os horários abaixo são fictícios e servem
+            apenas para demonstrar o funcionamento do protótipo.
+        </p>
+
+        <div class="schedule-list">
+
+            <article class="card schedule-card" data-schedule="01">
+                <span class="linebadge">01</span>
+                <h3>Linha 01 — Centro</h3>
+
+                <div class="schedule">
+                    <section>
+                        <b>Manhã</b>
+                        <div class="times">
+                            <span>06:00</span>
+                            <span>07:00</span>
+                            <span>08:00</span>
+                            <span>09:00</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Tarde</b>
+                        <div class="times">
+                            <span>12:00</span>
+                            <span>13:00</span>
+                            <span>14:00</span>
+                            <span>17:00</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Noite</b>
+                        <div class="times">
+                            <span>18:00</span>
+                            <span>19:00</span>
+                            <span>20:00</span>
+                        </div>
+                    </section>
+                </div>
+            </article>
+
+            <article class="card schedule-card" data-schedule="02">
+                <span class="linebadge">02</span>
+                <h3>Linha 02 — Terminal</h3>
+
+                <div class="schedule">
+                    <section>
+                        <b>Manhã</b>
+                        <div class="times">
+                            <span>06:15</span>
+                            <span>07:15</span>
+                            <span>08:15</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Tarde</b>
+                        <div class="times">
+                            <span>12:15</span>
+                            <span>14:15</span>
+                            <span>16:15</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Noite</b>
+                        <div class="times">
+                            <span>18:15</span>
+                            <span>19:15</span>
+                        </div>
+                    </section>
+                </div>
+            </article>
+
+            <article class="card schedule-card" data-schedule="03">
+                <span class="linebadge">03</span>
+                <h3>Linha 03 — Bairros</h3>
+
+                <div class="schedule">
+                    <section>
+                        <b>Manhã</b>
+                        <div class="times">
+                            <span>06:30</span>
+                            <span>08:30</span>
+                            <span>10:30</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Tarde</b>
+                        <div class="times">
+                            <span>12:30</span>
+                            <span>15:30</span>
+                            <span>17:30</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Noite</b>
+                        <div class="times">
+                            <span>19:30</span>
+                        </div>
+                    </section>
+                </div>
+            </article>
+
+            <article class="card schedule-card" data-schedule="04">
+                <span class="linebadge">04</span>
+                <h3>Linha 04 — Universidade</h3>
+
+                <div class="schedule">
+                    <section>
+                        <b>Manhã</b>
+                        <div class="times">
+                            <span>07:00</span>
+                            <span>08:00</span>
+                            <span>09:00</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Tarde</b>
+                        <div class="times">
+                            <span>13:00</span>
+                            <span>15:00</span>
+                            <span>17:00</span>
+                        </div>
+                    </section>
+
+                    <section>
+                        <b>Noite</b>
+                        <div class="times">
+                            <span>18:30</span>
+                            <span>21:00</span>
+                        </div>
+                    </section>
+                </div>
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <div class="footbrand">RotaBus</div>
+    <p>Mobilidade urbana com mais praticidade.</p>
+    <a href="index.html">Voltar ao início</a>
+</footer>
+
+</body>
+</html>

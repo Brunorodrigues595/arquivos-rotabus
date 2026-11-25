@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RotaBus | Linhas</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+    <a class="brand" href="index.html">
+        <img src="assets/rotabus-logo.png" alt="RotaBus">
+    </a>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a class="active" href="linhas.html">Linhas</a>
+        <a href="horarios.html">Horários</a>
+        <a href="mapa.html">Mapa</a>
+        <a href="sobre.html">Sobre</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="pagehero">
+        <span class="eyebrow">TRANSPORTE PÚBLICO</span>
+        <h1>Linhas de ônibus</h1>
+        <p>Pesquise uma linha e consulte as informações disponíveis.</p>
+    </section>
+
+    <section class="section">
+
+        <form class="filterbar" id="line-search">
+            <input
+                type="search"
+                id="line-query"
+                placeholder="Buscar por número ou destino..."
+            >
+            <button class="primary" type="submit">Buscar</button>
+        </form>
+
+        <p class="notice">
+            As linhas abaixo são exemplos demonstrativos.
+        </p>
+
+        <div class="cards" id="line-cards">
+
+            <article class="card searchable"
+                data-search="01 centro terminal">
+
+                <span class="linebadge">01</span>
+                <h3>Linha 01 — Centro</h3>
+                <p>Trajeto demonstrativo com atendimento à região central.</p>
+
+                <a href="horarios.html" class="button-link">
+                    Consultar horários
+                </a>
+            </article>
+
+            <article class="card searchable"
+                data-search="02 terminal bairros">
+
+                <span class="linebadge">02</span>
+                <h3>Linha 02 — Terminal</h3>
+                <p>Trajeto demonstrativo com passagem pelo terminal.</p>
+
+                <a href="horarios.html" class="button-link">
+                    Consultar horários
+                </a>
+            </article>
+
+            <article class="card searchable"
+                data-search="03 bairros">
+
+                <span class="linebadge">03</span>
+                <h3>Linha 03 — Bairros</h3>
+                <p>Trajeto demonstrativo entre regiões residenciais.</p>
+
+                <a href="horarios.html" class="button-link">
+                    Consultar horários
+                </a>
+            </article>
+
+            <article class="card searchable"
+                data-search="04 universidade campus">
+
+                <span class="linebadge">04</span>
+                <h3>Linha 04 — Universidade</h3>
+                <p>Trajeto demonstrativo para a região universitária.</p>
+
+                <a href="horarios.html" class="button-link">
+                    Consultar horários
+                </a>
+            </article>
+
+        </div>
+
+        <p id="no-lines" class="empty-state" hidden>
+            Nenhuma linha encontrada.
+        </p>
+
+    </section>
+
+</main>
+
+<footer>
+    <div class="footbrand">RotaBus</div>
+    <p>Mobilidade urbana com mais praticidade.</p>
+    <a href="index.html">Voltar ao início</a>
+</footer>
+
+</body>
+</html>
