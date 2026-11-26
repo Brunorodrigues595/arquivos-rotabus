@@ -1028,3 +1028,37 @@ if (menuToggle && mainNav) {
 /* INICIAR O SITE */
 
 loadData();
+
+const THEME_KEY = "rotabus-theme";
+const themeToggle = document.getElementById("themeToggle");
+
+function applyTheme(theme) {
+  const activeTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", activeTheme);
+
+  if (themeToggle) {
+    themeToggle.textContent =
+      activeTheme === "dark" ? "Modo claro" : "Modo escuro";
+  }
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const current =
+        document.documentElement.getAttribute("data-theme") || "light";
+      const next = current === "dark" ? "light" : "dark";
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    });
+  }
+}
+
+initTheme();

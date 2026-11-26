@@ -1657,3 +1657,95 @@ button:hover {
     height: 55px;
     object-fit: contain;
 }
+
+/* BOTÃO DE TEMA */
+.theme-toggle {
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 9px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* MODO ESCURO */
+[data-theme="dark"] {
+  --bg: #0f1720;
+  --white: #17222f;
+  --ink: #e6eef5;
+  --muted: #9eb0c2;
+  --line: #28384a;
+  --blue-soft: #1e354d;
+  --navy: #dcebf7;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .site-header {
+  background: rgba(23, 34, 47, 0.96);
+}
+
+[data-theme="dark"] .page-heading {
+  background: linear-gradient(110deg, #162433, #111b26);
+}
+
+[data-theme="dark"] .how-section {
+  background: #131e2a;
+}
+
+[data-theme="dark"] .search-panel,
+[data-theme="dark"] .search-panel label,
+[data-theme="dark"] .search-row input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] .line-card,
+[data-theme="dark"] .route-card,
+[data-theme="dark"] .steps-grid article,
+[data-theme="dark"] .schedule-card,
+[data-theme="dark"] .about-card,
+[data-theme="dark"] .empty-state {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .field select:disabled {
+  background: #111923;
+  color: #6c7f93;
+}
+
+[data-theme="dark"] .schedule-summary {
+  background: #172b3e;
+  color: var(--ink);
+}
+
+[data-theme="dark"] .time-table th {
+  background: #1c2b3b;
+  color: #c7d9e8;
+}
+
+[data-theme="dark"] .time-table td {
+  color: var(--muted);
+  border-bottom-color: var(--line);
+}
+
+[data-theme="dark"] .time-table tbody tr:hover {
+  background: #1b2836;
+}
+
+[data-theme="dark"] .info-strip,
+[data-theme="dark"] .map-notice {
+  background: #2b2414;
+  border-color: #574720;
+  color: #f3d58d;
+}
+
+[data-theme="dark"] .site-footer {
+  background: #090f16;
+}
