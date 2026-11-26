@@ -1,94 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RotaBus | Sobre</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sobre - RotaBus Santa Cruz do Sul">
+  <title>Sobre | RotaBus</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
-<body>
+<body data-page="about">
 
-<header class="top">
-    <a class="brand" href="index.html">
-        <img src="assets/rotabus-logo.png" alt="RotaBus">
-    </a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/rotabus-logo.svg" alt="RotaBus">
+      </a>
+      <button class="menu-toggle" id="menuToggle"
+        aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html" data-nav="home">Início</a>
+        <a href="linhas.html" data-nav="lines">Linhas</a>
+        <a href="horarios.html" data-nav="schedules">Horários</a>
+        <a href="mapa.html" data-nav="map">Mapa</a>
+        <a href="sobre.html" data-nav="about">Sobre</a>
+      </nav>
+    </div>
+  </header>
 
-    <nav>
-        <a href="index.html">Início</a>
-        <a href="linhas.html">Linhas</a>
-        <a href="horarios.html">Horários</a>
-        <a href="mapa.html">Mapa</a>
-        <a class="active" href="sobre.html">Sobre</a>
-    </nav>
-</header>
+  <main id="app" class="page-main">
+    <div class="container loading-state">Carregando...</div>
+  </main>
 
-<main>
-
-    <section class="pagehero">
-        <span class="eyebrow">CONHEÇA O PROJETO</span>
-        <h1>Sobre o RotaBus</h1>
-        <p>Informação e organização para facilitar a mobilidade urbana.</p>
-    </section>
-
-    <section class="section">
-
-        <div class="about-content">
-
-            <h2>O que é o RotaBus?</h2>
-
-            <p>
-                O RotaBus é um projeto de site voltado à consulta
-                de informações sobre transporte público.
-                A proposta é reunir, em um único ambiente,
-                informações sobre linhas, horários e itinerários
-                para ajudar as pessoas a planejarem seus deslocamentos.
-            </p>
-
-            <h2>Objetivo</h2>
-
-            <p>
-                Facilitar o acesso às informações do transporte
-                coletivo por meio de uma interface simples,
-                organizada e adaptável a computadores e celulares.
-            </p>
-
-        </div>
-
-        <div class="cards">
-
-            <article class="card">
-                <h3>Praticidade</h3>
-                <p>Informações organizadas para facilitar a consulta.</p>
-            </article>
-
-            <article class="card">
-                <h3>Acessibilidade</h3>
-                <p>Layout responsivo e navegação clara.</p>
-            </article>
-
-            <article class="card">
-                <h3>Mobilidade</h3>
-                <p>Apoio ao planejamento de deslocamentos urbanos.</p>
-            </article>
-
-        </div>
-
-        <div class="notice">
-            Este site é um protótipo. Os dados de linhas,
-            horários e mapas devem ser substituídos por
-            informações verificadas antes de qualquer uso público.
-        </div>
-
-    </section>
-
-</main>
-
-<footer>
-    <div class="footbrand">RotaBus</div>
-    <p>Mobilidade urbana com mais praticidade.</p>
-    <a href="index.html">Voltar ao início</a>
-</footer>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="footer-brand" href="index.html">RotaBus</a>
+        <p>Informação para você chegar mais longe em Santa Cruz do Sul.</p>
+      </div>
+      <p class="footer-note">
+        Projeto demonstrativo. Consulte a validade das tabelas de horários.
+        Não oferece rastreamento em tempo real.
+      </p>
+    </div>
+  </footer>
 
 </body>
 </html>
