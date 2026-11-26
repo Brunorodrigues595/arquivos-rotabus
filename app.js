@@ -266,25 +266,20 @@ function renderHome() {
 
         </div>
 
-        <div class="hero-visual"
-             aria-label="Ilustração de ônibus e rota">
+        <div class="hero-visual home-map-visual" aria-label="Mapa de referência de Santa Cruz do Sul">
+  <iframe
+    class="home-map-iframe"
+    title="Mapa de Santa Cruz do Sul"
+    src="https://www.openstreetmap.org/export/embed.html?bbox=-52.46%2C-29.75%2C-52.37%2C-29.68&layer=mapnik"
+    loading="lazy">
+  </iframe>
 
-          <div class="route-art">
-            <span class="route-dot"></span>
-            <span class="route-line"></span>
-            <span class="route-pin">●</span>
-          </div>
-
-          <div class="bus-illustration">
-            <span class="bus-windows"></span>
-            <span class="bus-front"></span>
-            <span class="wheel wheel-one"></span>
-            <span class="wheel wheel-two"></span>
-          </div>
-
-          <div class="visual-caption">
-            Mobilidade urbana em Santa Cruz do Sul
-          </div>
+  <div class="home-map-caption">
+    <strong>MAPA ILUSTRATIVO</strong>
+    <span>Referência visual de Santa Cruz do Sul</span>
+    <a href="mapa.html">Abrir mapa completo →</a>
+  </div>
+</div>  
 
         </div>
 
