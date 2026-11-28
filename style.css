@@ -1811,3 +1811,51 @@ button:hover {
     height: 300px;
   }
 }
+/* =====================================
+   CORREÇÃO DO PAINEL DE HORÁRIOS
+===================================== */
+
+/* MODO CLARO */
+html[data-theme="light"] .filter-panel {
+    background: #ffffff !important;
+    color: #17364f !important;
+    border: 1px solid #dce6ed;
+    box-shadow: 0 5px 20px rgba(16, 51, 77, 0.04);
+}
+
+html[data-theme="light"] .filter-panel label {
+    color: #28485f !important;
+}
+
+html[data-theme="light"] .filter-panel select {
+    background: #ffffff !important;
+    color: #24445b !important;
+    border: 1px solid #d5e0e8;
+}
+
+html[data-theme="light"] .filter-panel select:disabled {
+    background: #f1f4f6 !important;
+    color: #83909b !important;
+}
+
+/* MODO ESCURO */
+html[data-theme="dark"] .filter-panel {
+    background: #17222f !important;
+    color: #e6eef5 !important;
+    border: 1px solid #28384a;
+}
+
+html[data-theme="dark"] .filter-panel label {
+    color: #e6eef5 !important;
+}
+
+html[data-theme="dark"] .filter-panel select {
+    background: #17222f !important;
+    color: #e6eef5 !important;
+    border: 1px solid #28384a;
+}
+
+html[data-theme="dark"] .filter-panel select:disabled {
+    background: #111923 !important;
+    color: #6c7f93 !important;
+}

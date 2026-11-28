@@ -8,6 +8,12 @@
 const DATA_URL = "./rotabus-horarios.json";
 const app = document.getElementById("app");
 
+const LEAFLET_CSS =
+  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+
+const LEAFLET_JS =
+  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+
 let linhas = [];
 
 const page = document.body.dataset.page || "home";
@@ -869,59 +875,350 @@ function renderSchedules() {
   }
 }
 
+
+
 /* =========================================
-   PÁGINA DO MAPA
+   PÁGINA DO MAPA: TODAS AS LINHAS E VIAGENS
 ========================================= */
 
 function renderMap() {
-
   app.innerHTML = `
-
     ${pageHeading(
-      "LOCALIZAÇÃO",
-      "Mapa de Santa Cruz do Sul",
-      "Consulte a referência geográfica da cidade."
+      "ITINERÁRIOS",
+      "Mapa de linhas de ônibus",
+      "Escolha uma linha, uma viagem e encontre as paradas do percurso."
     )}
 
     <section class="container section-space">
-
-      <div class="map-notice">
-
-        <strong>Sobre este mapa:</strong>
-
-        O arquivo JSON recebido contém linhas, sentidos
-        e horários, mas não traz coordenadas de paradas
-        nem o traçado geográfico das viagens.
-
-        Por isso, o mapa abaixo é apenas uma referência
-        da cidade e não representa o caminho de uma
-        linha específica.
-
+      <div class="info-strip" style="margin-bottom:18px;">
+        <strong>Importante:</strong> os trajetos foram extraídos do Bus2.
+        O mapa não rastreia os ônibus em tempo real.
       </div>
 
-      <div class="map-frame">
+      <style>
+        .map-filter-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px;margin-bottom:18px;border:1px solid var(--border,#294052);border-radius:16px;background:var(--surface,#172534)}
+        .map-filter-panel .field{min-width:0}.map-filter-panel label,.map-stop-search label{display:block;margin-bottom:8px;font-weight:700}
+        .map-filter-panel select,.map-stop-search input{box-sizing:border-box;width:100%;min-height:46px;padding:10px 14px;border:1px solid var(--border,#294052);border-radius:10px;background:var(--input-bg,#172534);color:var(--text,#eaf2f8);font:inherit}
+        .map-workspace{display:grid;grid-template-columns:minmax(260px,330px) minmax(0,1fr);gap:16px}
+        .map-stops-panel{height:580px;min-width:0;display:flex;flex-direction:column;padding:16px;border:1px solid var(--border,#294052);border-radius:16px;background:var(--surface,#172534)}
+        .map-stops-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.map-stops-heading h2{margin:0;font-size:18px}
+        .map-stop-count{padding:4px 9px;border-radius:99px;background:rgba(25,118,210,.16);color:#55aaff;font-size:12px;font-weight:800;white-space:nowrap}
+        .map-stop-search{margin-bottom:12px}.map-stop-list{display:flex;flex-direction:column;gap:7px;overflow-y:auto;min-height:0;padding-right:4px}
+        .map-stop-item{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center;width:100%;padding:10px;text-align:left;border:1px solid var(--border,#294052);border-radius:11px;background:transparent;color:var(--text,#eaf2f8);cursor:pointer;font:inherit}
+        .map-stop-item:hover,.map-stop-item:focus-visible{background:rgba(25,118,210,.12);border-color:#1976d2;outline:none}
+        .map-stop-number{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#f5b700;color:#17202a;font-size:12px;font-weight:900}
+        .map-stop-item.is-start .map-stop-number{background:#16a34a;color:#fff}.map-stop-item.is-end .map-stop-number{background:#dc4646;color:#fff}
+        .map-stop-name{display:block;font-size:13px;line-height:1.35;font-weight:650}.map-stop-kind{display:block;margin-top:3px;font-size:11px;opacity:.72}.map-stop-empty{padding:16px 8px;opacity:.7;font-size:13px}
+        .map-canvas-wrap{height:580px;min-width:0;overflow:hidden;border:1px solid var(--border,#294052);border-radius:16px;background:#e8edf1}#routeMap{width:100%;height:100%}
+        .map-route-endpoint{display:grid;place-items:center;width:28px;height:28px;border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 8px #0005;color:#fff;font-size:13px;font-weight:900}.map-route-endpoint span{transform:rotate(45deg)}.map-route-start{background:#16a34a}.map-route-finish{background:#dc4646}
+        .map-itinerary-card{margin-top:18px}.map-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:12px}.map-legend-item{display:inline-flex;align-items:center;gap:7px}.map-legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+        @media(max-width:850px){.map-workspace{grid-template-columns:1fr}.map-stops-panel{height:320px}.map-canvas-wrap{height:450px}}
+        @media(max-width:600px){.map-filter-panel{grid-template-columns:1fr;padding:14px}.map-canvas-wrap{height:380px}}
+        /* CORREÇÃO DAS CORES DO MAPA */
 
-        <iframe
-          title="Mapa de referência de Santa Cruz do Sul"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=-52.46%2C-29.75%2C-52.37%2C-29.68&layer=mapnik"
-          loading="lazy">
-        </iframe>
+.map-filter-panel,
+.map-stops-panel {
+  background: var(--white, #17222f) !important;
+  color: var(--ink, #e6eef5);
+  border-color: var(--line, #28384a);
+}
 
+.map-stops-heading h2,
+.map-stop-item {
+  color: var(--ink, #e6eef5);
+}
+
+.map-stop-item {
+  background: var(--white, #17222f);
+  border-color: var(--line, #28384a);
+}
+
+.map-filter-panel label,
+.map-stop-search label {
+  color: var(--ink, #e6eef5);
+}
+
+.map-filter-panel select,
+.map-stop-search input {
+  background: var(--white, #17222f);
+  color: var(--ink, #e6eef5);
+  border-color: var(--line, #28384a);
+}
+
+.map-stop-name {
+  color: var(--ink, #e6eef5);
+}
+
+.map-stop-kind {
+  color: var(--muted, #9eb0c2);
+}
+
+.map-stop-item:hover {
+  background: var(--blue-soft, #1e354d);
+}
+      </style>
+
+      <div class="map-filter-panel">
+        <div class="field"><label for="mapRouteSelect">Linha</label><select id="mapRouteSelect"><option value="">Carregando linhas...</option></select></div>
+        <div class="field"><label for="mapTripSelect">Viagem / sentido</label><select id="mapTripSelect" disabled><option value="">Selecione uma linha primeiro</option></select></div>
       </div>
 
-      <p class="map-attribution">
-        Mapa ©
-        <a
-          href="https://www.openstreetmap.org/copyright"
-          target="_blank"
-          rel="noopener">
-          OpenStreetMap
-        </a>.
-      </p>
+      <div class="map-workspace">
+        <aside class="map-stops-panel" aria-label="Lista de paradas">
+          <div class="map-stops-heading"><h2>Paradas do trajeto</h2><span class="map-stop-count" id="mapStopCount">0 paradas</span></div>
+          <div class="map-stop-search"><label for="mapStopSearch">Pesquisar parada</label><input id="mapStopSearch" type="search" placeholder="Digite o nome da rua ou parada..." autocomplete="off"></div>
+          <div class="map-stop-list" id="mapStopList" aria-live="polite"><div class="map-stop-empty">Selecione uma viagem para ver as paradas.</div></div>
+        </aside>
+        <div class="map-canvas-wrap"><div id="routeMap" aria-label="Mapa do itinerário selecionado"></div></div>
+      </div>
 
+      <div id="routeMapInfo" class="map-itinerary-card" aria-live="polite"></div>
     </section>
-
   `;
+
+  const lineSelect = document.getElementById("mapRouteSelect");
+  const tripSelect = document.getElementById("mapTripSelect");
+  const searchInput = document.getElementById("mapStopSearch");
+  const stopList = document.getElementById("mapStopList");
+  const stopCount = document.getElementById("mapStopCount");
+  const info = document.getElementById("routeMapInfo");
+
+  let map;
+  let routeLayer;
+  let stopsLayer;
+  let allTrips = [];
+  let selectedStops = [];
+  let markers = new Map();
+
+  function loadLeaflet() {
+    return new Promise((resolve, reject) => {
+      if (window.L) return resolve();
+
+      if (!document.getElementById("leaflet-css")) {
+        const css = document.createElement("link");
+        css.id = "leaflet-css";
+        css.rel = "stylesheet";
+        css.href = LEAFLET_CSS;
+        document.head.appendChild(css);
+      }
+
+      const existing = document.querySelector('script[data-leaflet-loader="true"]');
+      if (existing) {
+        if (existing.dataset.loaded === "true" && window.L) return resolve();
+        existing.addEventListener("load", resolve, { once: true });
+        existing.addEventListener("error", () => reject(new Error("Não foi possível carregar o Leaflet.")), { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.dataset.leafletLoader = "true";
+      script.src = LEAFLET_JS;
+      script.onload = () => { script.dataset.loaded = "true"; resolve(); };
+      script.onerror = () => reject(new Error("Não foi possível carregar o Leaflet."));
+      document.head.appendChild(script);
+    });
+  }
+
+  // Converte o campo shape do Bus2 em coordenadas [latitude, longitude].
+  function decodeShape(encoded) {
+    let index = 0, lat = 0, lng = 0;
+    const points = [];
+
+    while (index < encoded.length) {
+      let result = 0, shift = 0, byte;
+      do {
+        if (index >= encoded.length) throw new Error("Traçado incompleto.");
+        byte = encoded.charCodeAt(index++) - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+      } while (byte >= 0x20);
+      lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+
+      result = 0; shift = 0;
+      do {
+        if (index >= encoded.length) throw new Error("Traçado incompleto.");
+        byte = encoded.charCodeAt(index++) - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+      } while (byte >= 0x20);
+      lng += (result & 1) ? ~(result >> 1) : (result >> 1);
+      points.push([lat / 1e5, lng / 1e5]);
+    }
+    return points;
+  }
+
+  function fillLineOptions() {
+    const grouped = new Map();
+    allTrips.forEach(trip => {
+      const key = String(trip.linha);
+      if (!grouped.has(key)) grouped.set(key, {
+        linha: key,
+        nome: trip.nomeLinha || trip.routeName || `Linha ${key}`
+      });
+    });
+
+    const lines = [...grouped.values()].sort((a, b) =>
+      a.linha.localeCompare(b.linha, "pt-BR", { numeric: true })
+    );
+
+    lineSelect.innerHTML = lines.map(line => `
+      <option value="${escapeHTML(line.linha)}">${escapeHTML(line.linha)} — ${escapeHTML(line.nome)}</option>
+    `).join("");
+    lineSelect.value = lines.some(line => line.linha === "10") ? "10" : (lines[0]?.linha || "");
+    fillTripOptions();
+  }
+
+  function fillTripOptions() {
+    const trips = allTrips.filter(trip => String(trip.linha) === lineSelect.value);
+    tripSelect.innerHTML = trips.map(trip => `
+      <option value="${escapeHTML(String(trip.tripId))}">${escapeHTML(trip.tripName || `Viagem ${trip.tripId}`)} (${trip.stops.length} paradas)</option>
+    `).join("");
+    tripSelect.disabled = !trips.length;
+
+    if (lineSelect.value === "10") {
+      const firstTested = trips.find(trip => String(trip.tripName).toLocaleLowerCase("pt-BR") === "oktober via galo");
+      if (firstTested) tripSelect.value = String(firstTested.tripId);
+    }
+    drawSelectedTrip();
+  }
+
+  function renderStopList() {
+    const query = searchInput.value.trim().toLocaleLowerCase("pt-BR");
+    const filtered = selectedStops.map((stop, index) => ({ stop, index }))
+      .filter(({ stop }) => String(stop.name || "").toLocaleLowerCase("pt-BR").includes(query));
+
+    stopCount.textContent = `${filtered.length} de ${selectedStops.length} paradas`;
+    if (!filtered.length) {
+      stopList.innerHTML = `<div class="map-stop-empty">Nenhuma parada encontrada.</div>`;
+      return;
+    }
+
+    stopList.innerHTML = filtered.map(({ stop, index }) => {
+      const start = index === 0;
+      const end = index === selectedStops.length - 1;
+      const kind = start ? "Início do percurso" : (end ? "Fim do percurso" : `Parada ${index + 1}`);
+      const className = start ? "is-start" : (end ? "is-end" : "");
+      const number = start ? "I" : (end ? "F" : String(index + 1));
+      return `<button type="button" class="map-stop-item ${className}" data-stop-index="${index}">
+        <span class="map-stop-number">${number}</span><span>
+          <span class="map-stop-name">${escapeHTML(stop.name || `Parada ${index + 1}`)}</span>
+          <span class="map-stop-kind">${kind}</span>
+        </span></button>`;
+    }).join("");
+
+    stopList.querySelectorAll("[data-stop-index]").forEach(button => {
+      button.addEventListener("click", () => {
+        const marker = markers.get(Number(button.dataset.stopIndex));
+        if (!marker) return;
+        map.setView(marker.getLatLng(), Math.max(map.getZoom(), 16));
+        marker.openPopup();
+      });
+    });
+  }
+
+  function drawSelectedTrip() {
+    const trip = allTrips.find(item =>
+      String(item.linha) === lineSelect.value && String(item.tripId) === tripSelect.value
+    );
+
+    if (routeLayer) map.removeLayer(routeLayer);
+    if (stopsLayer) map.removeLayer(stopsLayer);
+    routeLayer = null;
+    stopsLayer = null;
+    markers = new Map();
+    selectedStops = [];
+    searchInput.value = "";
+
+    if (!trip) {
+      info.innerHTML = `<div class="empty-state">Não há viagens cadastradas para esta linha.</div>`;
+      stopList.innerHTML = `<div class="map-stop-empty">Nenhuma parada disponível.</div>`;
+      stopCount.textContent = "0 paradas";
+      return;
+    }
+
+    try {
+      const points = decodeShape(trip.shape || "");
+      if (points.length < 2) throw new Error("O traçado desta viagem não possui pontos suficientes.");
+
+      routeLayer = L.polyline(points, { color: "#1976D2", weight: 5, opacity: .92 }).addTo(map);
+      stopsLayer = L.layerGroup().addTo(map);
+      selectedStops = (trip.stops || []).filter(stop =>
+        Number.isFinite(Number(stop.lat)) && Number.isFinite(Number(stop.lng))
+      );
+
+      selectedStops.forEach((stop, index) => {
+        const start = index === 0;
+        const end = index === selectedStops.length - 1;
+        const position = [Number(stop.lat), Number(stop.lng)];
+        let marker;
+
+        if (start || end) {
+          const icon = L.divIcon({
+            className: "",
+            html: `<div class="map-route-endpoint ${start ? "map-route-start" : "map-route-finish"}"><span>${start ? "I" : "F"}</span></div>`,
+            iconSize: [34, 34], iconAnchor: [17, 30], popupAnchor: [0, -28]
+          });
+          marker = L.marker(position, { icon });
+        } else {
+          marker = L.circleMarker(position, {
+            radius: 5, color: "#fff", weight: 2, fillColor: "#F5B700", fillOpacity: 1
+          });
+        }
+
+        marker.bindPopup(`<strong>${escapeHTML(stop.name || `Parada ${index + 1}`)}</strong><br>${start ? "Início do percurso" : (end ? "Fim do percurso" : `Parada ${index + 1} de ${selectedStops.length}`)}`);
+        marker.addTo(stopsLayer);
+        markers.set(index, marker);
+      });
+
+      renderStopList();
+      map.fitBounds(routeLayer.getBounds(), { padding: [28, 28] });
+      info.innerHTML = `<article class="about-card">
+        <span class="eyebrow">ITINERÁRIO</span>
+        <h2>${escapeHTML(trip.routeName || `Linha ${trip.linha}`)}</h2>
+        <p><strong>Viagem:</strong> ${escapeHTML(trip.tripName || "Não identificada")}</p>
+        <p><strong>Paradas:</strong> ${selectedStops.length}</p>
+        <div class="map-legend">
+          <span class="map-legend-item"><i class="map-legend-dot" style="background:#16a34a"></i> Início</span>
+          <span class="map-legend-item"><i class="map-legend-dot" style="background:#f5b700"></i> Paradas</span>
+          <span class="map-legend-item"><i class="map-legend-dot" style="background:#dc4646"></i> Fim</span>
+        </div></article>`;
+      setTimeout(() => map.invalidateSize(), 150);
+    } catch (error) {
+      console.error("Erro ao desenhar a viagem:", error);
+      info.innerHTML = `<div class="alert alert-error"><strong>Não foi possível desenhar esta viagem.</strong><p>${escapeHTML(error.message)}</p></div>`;
+    }
+  }
+
+  async function initializeMap() {
+    try {
+      info.innerHTML = `<p>Carregando os trajetos...</p>`;
+      const response = await fetch("./rotabus-trajetos.json", { cache: "no-cache" });
+      if (!response.ok) throw new Error("Não foi possível abrir rotabus-trajetos.json. Confira se está na pasta principal do projeto.");
+
+      const data = await response.json();
+      if (!Array.isArray(data.trajetos) || !data.trajetos.length) throw new Error("O arquivo de trajetos não contém viagens.");
+      allTrips = data.trajetos.filter(trip => trip && trip.shape && Array.isArray(trip.stops) && trip.stops.length);
+      if (!allTrips.length) throw new Error("Nenhuma viagem possui traçado e paradas válidos.");
+
+      await loadLeaflet();
+      map = L.map("routeMap");
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+
+      lineSelect.addEventListener("change", fillTripOptions);
+      tripSelect.addEventListener("change", drawSelectedTrip);
+      searchInput.addEventListener("input", renderStopList);
+      fillLineOptions();
+      setTimeout(() => map.invalidateSize(), 250);
+    } catch (error) {
+      console.error("Erro ao carregar o mapa:", error);
+      info.innerHTML = `<div class="alert alert-error"><strong>Não foi possível carregar os trajetos.</strong><p>${escapeHTML(error.message)}</p><p>Confira se rotabus-trajetos.json está na mesma pasta do app.js e abra pelo Live Server.</p></div>`;
+    }
+  }
+
+  initializeMap();
 }
 
 /* =========================================
@@ -970,8 +1267,8 @@ function renderAbout() {
 
         <p>
           O protótipo não oferece rastreamento GPS em tempo
-          real. O mapa é apenas uma referência geográfica
-          e não mostra trajetos confirmados das linhas.
+          real. A página de mapa permite consultar itinerários
+          e paradas cadastrados para as viagens disponíveis.
         </p>
 
       </article>
@@ -1057,3 +1354,4 @@ function initTheme() {
 }
 
 initTheme();
+
